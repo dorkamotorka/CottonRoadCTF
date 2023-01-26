@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CottonRoad FileServer - Dashboard</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="description" content=""/>
+    <style>
+        .card-img-top {
+            width: 100%;
+            height: 20vw;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+
+{% if error %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        Error: {{ error }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+{% if info %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        Info: {{ info }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+{% with ip=ip %}
+	{% include 'navbar.html' %}
+{% endwith %}
+
+<div class="container">
+    <h1 class="text-center text-dark mt-2">FILE SERVER</h1>
+</div>
+
+<div class="container">
+    <h2 class="text-center text-dark mt-2">Welcome to the FileServer, {{ username }}!</h2>
+</div>
+
+<div class="container p-3">
+    <h2>Dashboard</h2>
+    <hr>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary mb-3 me-3" style="border-radius: 10px !important;"
+            data-bs-toggle="modal"
+            data-bs-target="#uploadFileModal">
+        Upload New File
+    </button>
+    <div class="mb-2 p-2" style="border-radius: 10px; background-color: #f5dcb5;">
+        <ul style="margin-bottom: 0;">
+            <li>
+                <h6>Here you can upload files to the FileServer</h6>
+            </li>
+            <li>
+                <h6>You can use these files in the webshop when creating items in the webshop</h6>
+            </li>
+            <li>
+                <h6>For example if you uploaded an image called 'example.jpg' then you can create an item in the webshop
+                    and in the 'filename' field you can use the same name to reference this file 'example.jpg'</h6>
+            </li>
+        </ul>
+    </div>
+    <h3>Your uploaded files ({{ image_list|length }}/{{ config['MAX_FILE_UPLOADS'] }} files)</h3>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="uploadFileModal" tabindex="-1" aria-labelledby="uploadFileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="uploadFileModalLabel">UPLOAD FILE</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/dashboard" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <input type="file" name="file">
+                    <div id="fileHelp" class="form-text">Only 'jpg', 'png', or 'jpeg' files are allowed!</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="page-content container">
+    <div class="tab-content bg-transparent">
+        <div class="row">
+            {% for file in image_list %}
+                <div class="col-md-4">
+                    <div class="card card-body mb-4">
+                        <h5 class="text-truncate w-75 mb-4">{{ file["name"] }}</h5>
+                        <div>
+                            <img class="card-img-top" alt="Uploaded Image"
+                                 src="data:image/jpg;base64,{{ file["image"] }}"/>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

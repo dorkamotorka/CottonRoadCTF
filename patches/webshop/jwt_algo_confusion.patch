@@ -1,0 +1,158 @@
+diff --git a/dist/webshop/application/api/routes.py b/dist/webshop/application/api/routes.py
+index 479f48d..5b2f7f3 100644
+--- a/dist/webshop/application/api/routes.py
++++ b/dist/webshop/application/api/routes.py
+@@ -4,7 +4,7 @@ import random
+ import string
+ from io import BytesIO
+ from functools import wraps
+-from authlib.jose import jwt, JsonWebKey, JWK_ALGORITHMS
++from authlib.jose import JsonWebKey, JWK_ALGORITHMS, JsonWebToken
+ import requests
+ import re
+ from flask import *
+@@ -53,6 +53,7 @@ def oauth_auth():
+         else:
+             user = username_check
+         existing_user = user
++    jwt = JsonWebToken(['RS256'])
+     token = jwt.encode(
+         {"alg": "RS256"},
+         {"user": existing_user.username},
+@@ -70,6 +71,7 @@ def check_token(func):
+         cookie = request.cookies.get("access-token")
+         if cookie:
+             try:
++                jwt = JsonWebToken(['RS256'])
+                 token = jwt.decode(cookie, current_app.config["JWT_PUBLIC_KEY"])
+                 logging.debug(f"This is the user token '{token}'")
+                 result = User.get_from_username(token["user"])
+@@ -96,6 +98,7 @@ def check_token(func):
+ @check_token
+ def profile():
+     logging.debug("/profile endpoint called on webshop")
++    jwt = JsonWebToken(['RS256'])
+     username = jwt.decode(
+         request.cookies.get("access-token"), current_app.config["JWT_PUBLIC_KEY"]
+     )["user"]
+diff --git a/dist/webshop/application/items/routes.py b/dist/webshop/application/items/routes.py
+index afff50f..4424d9a 100644
+--- a/dist/webshop/application/items/routes.py
++++ b/dist/webshop/application/items/routes.py
+@@ -1,7 +1,7 @@
+ from . import items_api_blueprint
+ from functools import wraps
+ from io import BytesIO
+-from authlib.jose import jwt
++from authlib.jose import JsonWebToken
+ from .. import logging
+ from flask import (
+     make_response,
+@@ -25,6 +25,7 @@ def check_token(func):
+         cookie = request.cookies.get("access-token")
+         if cookie:
+             try:
++                jwt = JsonWebToken(['RS256'])
+                 token = jwt.decode(cookie, current_app.config["JWT_PUBLIC_KEY"])
+                 logging.debug(f"This is the user token '{token}'")
+                 result = User.get_from_username(token["user"])
+@@ -61,6 +62,7 @@ def get_all_items():
+ @check_token
+ def get_own_items():
+     logging.debug("/item endpoint called on webshop")
++    jwt = JsonWebToken(['RS256'])
+     decoded = jwt.decode(
+         request.cookies.get("access-token"), current_app.config["JWT_PUBLIC_KEY"]
+     )
+@@ -237,7 +239,7 @@ def create_item():
+     logging.debug(f"/item/create endpoint called on webshop")
+     if request.method == "GET":
+         return render_template("createItem.html", ip=current_app.config["PUBLIC_IP"])
+-
++    jwt = JsonWebToken(['RS256'])
+     decoded = jwt.decode(
+         request.cookies.get("access-token"), current_app.config["JWT_PUBLIC_KEY"]
+     )
+diff --git a/dist/webshop/application/login/routes.py b/dist/webshop/application/login/routes.py
+index dce5260..cdba0c6 100644
+--- a/dist/webshop/application/login/routes.py
++++ b/dist/webshop/application/login/routes.py
+@@ -7,7 +7,7 @@ from flask import (
+     redirect,
+     url_for,
+ )
+-from authlib.jose import jwt
++from authlib.jose import JsonWebToken
+ from ..models import *
+ from . import login_api_blueprint
+ import re
+@@ -29,6 +29,7 @@ def login():
+     cookie = request.cookies.get("access-token")
+     if cookie is not None:
+         try:
++            jwt = JsonWebToken(['RS256'])
+             token = jwt.decode(cookie, current_app.config["JWT_PUBLIC_KEY"])
+             result = User.get_from_username(token["user"])
+ 
+@@ -78,6 +79,7 @@ def login():
+             ),
+             400,
+         )
++    jwt = JsonWebToken(['RS256'])
+     token = jwt.encode(
+         {"alg": "RS256"},
+         {"user": result.username},
+@@ -96,6 +98,7 @@ def register():
+     cookie = request.cookies.get("access-token")
+     if cookie:
+         try:
++            jwt = JsonWebToken(['RS256'])
+             token = jwt.decode(cookie, current_app.config["JWT_PUBLIC_KEY"])
+ 
+             result = User.get_from_username(token["user"])
+diff --git a/dist/webshop/application/notes/routes.py b/dist/webshop/application/notes/routes.py
+index 2be5cd7..9fc71e3 100644
+--- a/dist/webshop/application/notes/routes.py
++++ b/dist/webshop/application/notes/routes.py
+@@ -10,7 +10,7 @@ from flask import (
+     url_for,
+ )
+ from ..models import *
+-from authlib.jose import jwt
++from authlib.jose import JsonWebToken
+ from .. import logging
+ 
+ 
+@@ -21,6 +21,7 @@ def check_token(func):
+         cookie = request.cookies.get("access-token")
+         if cookie:
+             try:
++                jwt = JsonWebToken(['RS256'])
+                 token = jwt.decode(cookie, current_app.config["JWT_PUBLIC_KEY"])
+                 logging.debug(f"This is the user token '{token}'")
+                 result = User.get_from_username(token["user"])
+@@ -47,6 +48,7 @@ def check_token(func):
+ @check_token
+ def get_notes():
+     logging.debug("/notes endpoint called on webshop")
++    jwt = JsonWebToken(['RS256'])
+     decoded = jwt.decode(
+         request.cookies.get("access-token"), current_app.config["JWT_PUBLIC_KEY"]
+     )
+@@ -64,6 +66,7 @@ def get_notes():
+ @check_token
+ def get_filtered_notes():
+     logging.debug("/notes/search endpoint called on webshop")
++    jwt = JsonWebToken(['RS256'])
+     decoded = jwt.decode(
+         request.cookies.get("access-token"), current_app.config["JWT_PUBLIC_KEY"]
+     )
+@@ -87,7 +90,7 @@ def create_note():
+     logging.debug("/notes/create endpoint called on webshop")
+     if request.method == "GET":
+         return render_template("createNote.html", ip=current_app.config["PUBLIC_IP"])
+-
++    jwt = JsonWebToken(['RS256'])
+     username = jwt.decode(
+         request.cookies.get("access-token"), current_app.config["JWT_PUBLIC_KEY"]
+     )["user"]

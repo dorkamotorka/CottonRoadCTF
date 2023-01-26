@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CottonRoad - Create an Item!</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="description" content=""/>
+</head>
+<body>
+
+{% with ip=ip %}
+	{% include 'navbar.html' %}
+{% endwith %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1 class="text-center text-dark mt-2">WEBSHOP</h1>
+            <h2 class="text-center text-dark mt-2">Create an Item</h2>
+            <div class="card my-4">
+                <form class="card-body p-lg-5" style="background-color: #b5e7f5;" action="/item/create" method="post">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="title" aria-describedby="titleHelp"
+                               placeholder="Title" name="title">
+                        <div id="titleHelp" class="form-text">Give your item a name that everyone can see</div>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="filename" aria-describedby="filenameHelp"
+                               placeholder="Filename" name="filename">
+                        <div id="filenameHelp" class="form-text">Has to match a file uploaded to the FileServer e.g. 'example.jpg'</div>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="stock" aria-describedby="stockHelp"
+                               placeholder="Stock" name="stock">
+                        <div id="stockHelp" class="form-text">The amount of this item available</div>
+                    </div>
+                    {% if error %}
+                        <div class="mb-3">
+                            <label style="color: red">Error: {{ error }}</label>
+                        </div>
+                    {% endif %}
+                    {% if info %}
+                        <div class="mb-3">
+                            <label style="color: grey">Info: {{ info }}</label>
+                        </div>
+                    {% endif %}
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary px-5 mb-5 w-100">Create Item</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

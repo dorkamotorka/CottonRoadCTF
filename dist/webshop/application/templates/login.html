@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CottonRoad - Login</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="description" content=""/>
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <script src="/static/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h2 class="text-center text-dark mt-5">WEBSHOP Login</h2>
+            <div class="card my-5">
+                <form class="card-body p-lg-5" style="background-color: #b5e7f5;" action="/login" method="post">
+                    <div class="mb-3">
+                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp"
+                               placeholder="Email" name="email">
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" id="password" placeholder="Password"
+                               name="password">
+                    </div>
+                    {% if error %}
+                        <div class="mb-3">
+                            <label style="color: red">Error: {{ error }}</label>
+                        </div>
+                    {% endif %}
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary px-5 mb-3 w-100">Login</button>
+                    </div>
+                    <div class="text-center">
+                        <a class="btn btn-secondary px-5 mb-4 w-100"
+                           href="http://{{ ip }}:10100/oauth/login" role="button">Login via oAuth</a>
+                    </div>
+                    <div id="createAccount" class="form-text text-center mb-3 text-dark">Not
+                        Registered? <a href="{{ url_for('login_api_blueprint.register') }}" class="text-dark fw-bold">
+                            Create an
+                            Account</a>
+                    </div>
+                    <div id="goToFileServer" class="form-text text-center mb-1 text-dark">
+                        Just want to upload files?
+			<a href="http://{{ ip }}:10101/dashboard" class="text-dark fw-bold">
+                            Go to FileServer
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

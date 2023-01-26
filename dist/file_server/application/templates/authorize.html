@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CottonRoad Authorized Access</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="description" content=""/>
+</head>
+<body>
+
+{% with ip=ip %}
+	{% include 'navbar.html' %}
+{% endwith %}
+
+
+<div>
+    <h1 class="text-center text-dark mt-2">FILESERVER oAuth</h1>
+</div>
+
+<button type="button" class="btn btn-primary m-3" data-bs-toggle="modal" data-bs-target="#oAuthModal">
+    Authorize WEBSHOP Access
+</button>
+
+<div class="modal fade" id="oAuthModal" tabindex="-1" aria-labelledby="oAuthModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="oAuthModalLabel">WEBSHOP Access</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="" method="post">
+                <div class="modal-body">
+                    <p>The application is requesting following access:</p>
+                    <ul>
+                        {% for scope in grant.request.scope.split() %}
+                            <li><strong>{{ scope }}</strong></li>
+                        {% endfor %}
+                    </ul>
+                    <p>Authenticating with:</p>
+                    <ul>
+                        <li><strong>Username: {{ user.username }}</strong></li>
+                        <li><strong>Email: {{ user.email }}</strong></li>
+                    </ul>
+                    <label>
+                        <input type="checkbox" name="confirm" class="me-2">
+                        <span>I grant access to WEBSHOP</span>
+                    </label>
+
+                    {% if not user %}
+                        <p>You haven't logged in.</p>
+                        <a href="{{ url_for('server_auth_blueprint.register') }}" class="text-dark fw-bold">Log in
+                            here</a>
+                    {% endif %}
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Authorize</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

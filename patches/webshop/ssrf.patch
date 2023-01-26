@@ -1,0 +1,13 @@
+--- a/dist/webshop/application/items/routes.py	2023-01-09 23:11:23.436527671 +0100
++++ b/dist/webshop/application/items/routes.py	2023-01-09 23:27:29.569977342 +0100
+@@ -205,6 +205,10 @@
+ def stock_api():
+     logging.debug(f"/item/stock endpoint called on webshop")
+     stockApi = request.form.get("stockApi")
++
++    if not stockApi.startswith("/item/stock/check"):
++        return "Service not found", 404
++
+     try:
+         item_stock = requests.get(
+             f"http://{current_app.config['PUBLIC_IP']}:10100{stockApi}"

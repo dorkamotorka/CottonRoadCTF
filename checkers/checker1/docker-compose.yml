@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  checker:
+    build: .
+    image: registry.gitlab.secpriv.tuwien.ac.at/ecsc2022/gameserver/cottonroad-checker1:latest
+    network_mode: host
+    command: 127.0.0.1 10 ${TICK}

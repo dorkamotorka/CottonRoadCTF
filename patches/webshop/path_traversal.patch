@@ -1,0 +1,30 @@
+--- a/dist/webshop/application/items/routes.py	2023-01-10 01:52:15.603194509 +0100
++++ b/dist/webshop/application/items/routes.py	2023-01-10 01:55:24.336602835 +0100
+@@ -17,6 +17,15 @@
+ from ..models import *
+ import hashlib
+ import base64
++import re
++
++def isAlphanumeric(text):
++    if text is not None and re.match("^[a-zA-Z0-9]+$", text) is not None:
++        logging.debug(f"{text} is alphanumeric")
++        return True
++
++    logging.debug(f"{text} is not alphanumeric")
++    return False
+ 
+ def check_token(func):
+     @wraps(func)
+@@ -167,7 +176,10 @@
+         logging.error(f"Item not found")
+         return render_template("notfound.html"), 404
+         
+-    filename = secure_filename(filename)
++    if not isAlphanumeric(filename):
++        logging.error(f"Item not found")
++        return render_template("notfound.html"), 404
++
+     hashed_mail = hashlib.md5(found_item.user_email.encode()).hexdigest()
+ 
+     try:

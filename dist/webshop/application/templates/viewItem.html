@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CottonRoad - View Items!</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="description" content=""/>
+    <script src="/static/stockCheck.js" defer></script>
+    <style>
+        .card-img-top {
+            width: 100%;
+            height: 35vw;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+
+{% if info %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        Info: {{ info }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+{% if error %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        Error: {{ error }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+{% with ip=ip %}
+	{% include 'navbar.html' %}
+{% endwith %}
+
+<section>
+    <div class="container">
+        <h1 class="text-center text-dark mt-2">WEBSHOP ITEM</h1>
+    </div>
+</section>
+
+<section>
+    <div class="container px-4 px-lg-5 my-4">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-6">
+                <img class="card-img-top mb-5 mb-md-0" alt="a pic of the item lol"
+                     src="data:image/{{ item_image_type }};base64,{{ item_image }}"/>
+            </div>
+            <div class="col-md-6">
+                <div class="small mb-1">ITEM #{{ item_id }}</div>
+                <h1 class="display-5 fw-bolder">{{ item_title }}</h1>
+                <div class="fs-5">
+                    <p id="stockCheckResult">Stock available: </p>
+                </div>
+                <div class="d-flex">
+                    <form id="stockForm" action="/item/stock" method="POST">
+                        <input name="stockApi" value="/item/stock/check?itemId={{ item_id }}" type="hidden">
+                        <button class="btn btn-primary me-3" type="submit">Check stock</button>
+                    </form>
+                    <form id="reserveForm" action="/item/{{ item_id }}" method="POST">
+                        <button class="btn btn-warning me-3" type="submit">Reserve this item</button>
+                    </form>
+                    <span>
+                        <a class="btn btn-secondary me-3" href="/item/prevItem?path=/item/{{ prevItem }}"
+                           role="button">Previous Item</a>
+                    </span>
+                    {% if item_image_name != None and item_image_name != "" %}
+                        <span>
+                        <a class="btn btn-secondary" href="/item/view?id={{ item_id }}&file={{ item_image_name }}"
+                           role="button">View Image</a>
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

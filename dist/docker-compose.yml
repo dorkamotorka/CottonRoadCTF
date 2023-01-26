@@ -1,0 +1,37 @@
+version: "3"
+#name: team10
+
+services:
+  cottonroad-webshop:
+    build:
+      context: ./webshop
+      args: 
+        - WEBSHOP_PORT=${WEBSHOP_PORT}
+        - FILESERVER_PORT=${FILESERVER_PORT}
+    ports:
+      - ${WEBSHOP_PORT}:${WEBSHOP_PORT}
+    environment:
+      - "PUBLIC_IP=10.10.1.1"
+    # networks:
+    #      node_net:
+    #         ipv4_address: 172.35.0.2
+
+  cottonroad-file-server:
+    build:
+      context: ./file_server
+      args: 
+        - FILESERVER_PORT=${FILESERVER_PORT}
+    ports: 
+      - ${FILESERVER_PORT}:${FILESERVER_PORT}
+    environment:
+      - "PUBLIC_IP=10.10.1.1"
+    # networks:
+    #      node_net:
+    #         ipv4_address: 172.35.0.3
+
+# networks:
+#   node_net:
+#     ipam:
+#       driver: default
+#       config:
+#         - subnet: 172.35.0.0/16

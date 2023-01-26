@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CottonRoad - Create a Note!</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="description" content=""/>
+</head>
+<body>
+
+{% with ip=ip %}
+	{% include 'navbar.html' %}
+{% endwith %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1 class="text-center text-dark mt-2">WEBSHOP</h1>
+            <h2 class="text-center text-dark mt-2">Create a Note</h2>
+            <div class="card my-4">
+                <form class="card-body p-lg-5" style="background-color: #b5e7f5;" action="/notes/create" method="post">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="title" aria-describedby="titleHelp"
+                               placeholder="Title" name="title">
+                        <div id="titleHelp" class="form-text">Give your private note a title</div>
+                    </div>
+                    <div class="mb-3">
+                        <textarea class="form-control" id="content" placeholder="Have anything on your mind?"
+                                  name="content" rows="5"></textarea>
+                        <div id="contentHelp" class="form-text">We'll never share your notes with anyone else</div>
+                    </div>
+                    {% if error %}
+                        <div class="mb-3">
+                            <label style="color: red">Error: {{ error }}</label>
+                        </div>
+                    {% endif %}
+                    {% if info %}
+                        <div class="mb-3">
+                            <label style="color: grey">Info: {{ info }}</label>
+                        </div>
+                    {% endif %}
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary px-5 mb-5 w-100">Create Note</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

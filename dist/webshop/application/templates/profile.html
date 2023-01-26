@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CottonRoad - Profile</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="description" content=""/>
+</head>
+<body>
+
+{% with ip=ip %}
+	{% include 'navbar.html' %}
+{% endwith %}
+
+<div class="container">
+    <h1 class="text-center text-dark mt-2">WEBSHOP</h1>
+</div>
+<div class="container">
+    <h2 class="text-center text-dark mt-2">Welcome to Cotton Road, {{ username }}!</h2>
+</div>
+<hr>
+<div class="container">
+    {% if error %}
+        <h4>Error: {{ error }}</h4>
+    {% endif %}
+</div>
+
+<img src="/static/hello.png" class="rounded mx-auto d-block" alt="Welcome Image">
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CottonRoad FileServer Navbar</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <script src="/static/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg bg-light" style="background-color: #f5dcb5; !important;">
+    <div class="container-fluid">
+        <a class="navbar-brand">CottonRoad</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link active" href="/dashboard">Dashboard</a>
+		<a class="nav-link active" href="http://{{ ip }}:10100/profile">Go to WEBSHOP</a>
+            </div>
+        </div>
+        <form class="d-flex" role="form" action="/auth/logout">
+            <button class="btn btn-outline-danger" type="submit">Logout</button>
+        </form>
+    </div>
+</nav>
+
+</body>
+</html>

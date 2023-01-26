@@ -1,0 +1,21 @@
+diff --git a/dist/webshop/application/models.py b/dist/webshop/application/models.py
+index 94c8d4f..8f1deeb 100644
+--- a/dist/webshop/application/models.py
++++ b/dist/webshop/application/models.py
+@@ -117,14 +117,13 @@ class Note:
+     @staticmethod
+     def get_filtered_notes(search, user_username):
+         db = get_db()
+-        query = f"""
+-                SELECT * FROM notes WHERE user_username = ? AND title LIKE '%{search}%';"""
++        query = "SELECT * FROM notes WHERE user_username = ? AND title LIKE ?;"
+ 
+         notes = []
+ 
+         try:
+ 
+-            res = db.execute(query, (user_username,)).fetchall()
++            res = db.execute(query, (user_username, '%' + search + '%',)).fetchall()
+         except Exception as e:
+             raise e
+         else:

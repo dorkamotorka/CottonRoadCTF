@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CottonRoad - View Notes!</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="description" content=""/>
+</head>
+<body>
+
+{% if info %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ info }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+{% with ip=ip %}
+	{% include 'navbar.html' %}
+{% endwith %}
+
+<div class="container p-3">
+    <h1 class="text-center text-dark mt-2">WEBSHOP</h1>
+    <h2>Your notes: ({{ notes_list|length }}/{{ config['MAX_NOTES'] }} notes)</h2>
+    <hr>
+    <div class="d-flex">
+        <a class="btn btn-primary" style="border-radius: 10px !important;"
+           href="{{ url_for('notes_api_blueprint.create_note') }}" role="button">Add New Note</a>
+        <div class="ms-3 col-4">
+            <form action="/notes/search" method="post" class="form-inline">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="search" id="search-form" name="search-form" class="form-control"
+                               placeholder="Search note titles"/>
+                        <button type="submit" class="btn btn-primary">Search</button>
+                        <a href="/notes" class="btn btn-danger">Reset Search</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if error %}
+    <div class="container">
+        <h4>Error: {{ error }}</h4>
+    </div>
+{% endif %}
+
+{% if notes_list %}
+    <div class="page-content container">
+        <div class="tab-content bg-transparent">
+            <div class="row">
+                {% for note in notes_list %}
+                    <div class="col-md-4" style="padding-left: 16px;">
+                        <div class="card card-body mb-3">
+                            <h5 class="text-truncate w-75 mb-2">{{ note["title"] }}</h5>
+                            <div>
+                                <p class="text-muted">{{ note["content"] }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="container p-3">
+        No notes could be found.
+    </div>
+{% endif %}
+
+</body>
+</html>

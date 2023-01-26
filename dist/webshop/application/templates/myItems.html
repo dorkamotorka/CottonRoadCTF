@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CottonRoad - My Items!</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="description" content=""/>
+</head>
+<body>
+
+{% if info %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ info }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+
+{% with ip=ip %}
+	{% include 'navbar.html' %}
+{% endwith %}
+
+<div class="container p-3">
+    <h1 class="text-center text-dark mt-2">WEBSHOP</h1>
+    <h2>Your Items ({{ items_list|length }}/{{ config['MAX_SHOP_ITEMS'] }} items)</h2>
+    <hr>
+    <a class="btn btn-primary" style="border-radius: 10px !important;"
+       href="{{ url_for('items_api_blueprint.create_item') }}" role="button">Add New Item</a>
+</div>
+
+<div class="container">
+    {% if error %}
+        <h4>Error: {{ error }}</h4>
+    {% endif %}
+</div>
+
+<div class="page-content container">
+    <div class="tab-content bg-transparent">
+        <div class="row">
+            {% for item in items_list %}
+                <div class="col-md-4" style="padding-left: 16px;">
+                    <a href="/item/{{ item["id"] }}" style="text-decoration: none; color: inherit;">
+                        <div class="card card-body mb-4">
+                            <h5 class="text-truncate w-75 mb-4">{{ item["title"] }}</h5>
+                            <div>
+                                <p class="text-muted">Sold by: {{ item["user_username"] }}</p>
+                                <p class="text-muted">Availability: {{ item["stock"] }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

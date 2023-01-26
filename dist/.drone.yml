@@ -1,0 +1,36 @@
+kind: pipeline
+type: docker
+name: default
+
+steps:
+- name: webshop
+  image: plugins/docker
+  settings:
+    mtu: "1200"
+    mirror: "https://registry.ctf.veronese.xyz"
+    insecure: true
+    registry: "10.10.${TEAM_ID}.3:5000"
+    repo: "10.10.${TEAM_ID}.3:5000/adcs/${DRONE_REPO_NAME}-webshop"
+    context: webshop
+    dockerfile: webshop/Dockerfile
+    tags: ["${DRONE_COMMIT_SHA:0:8}", "latest"]
+    cache_from: "10.10.${TEAM_ID}.3:5000/adcs/${DRONE_REPO_NAME}-webshop:latest"
+- name: file-server
+  image: plugins/docker
+  settings:
+    mtu: "1200"
+    mirror: "https://registry.ctf.veronese.xyz"
+    insecure: true
+    registry: "10.10.${TEAM_ID}.3:5000"
+    repo: "10.10.${TEAM_ID}.3:5000/adcs/${DRONE_REPO_NAME}-file-server"
+    context: file_server
+    dockerfile: file_server/Dockerfile
+    tags: ["${DRONE_COMMIT_SHA:0:8}", "latest"]
+    cache_from: "10.10.${TEAM_ID}.3:5000/adcs/${DRONE_REPO_NAME}-file-server:latest"
+    
+trigger:
+  branch:
+   - master
+  event:
+   - push
+   - custom

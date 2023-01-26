@@ -1,0 +1,39 @@
+--- a/dist/webshop/application/api/routes.py	2023-01-10 01:05:55.808862897 +0100
++++ b/dist/webshop/application/api/routes.py	2023-01-10 01:11:28.706094898 +0100
+@@ -16,6 +16,10 @@
+ import hashlib
+ 
+ 
++def randomString(length):
++    name = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(length))
++    return name
++
+ @server_api_blueprint.route("/rsa_pub")
+ def jwtPub():
+     jwk = JsonWebKey(algorithms=JWK_ALGORITHMS)
+@@ -45,20 +49,23 @@
+ 
+     existing_user = User.get_from_email(email)
+     username_check = User.get_from_username(username)
++    info = None
+ 
+     if existing_user is None:
+         if username_check is None:
+             user = User(email=email, username=username, password=None)
+             user.insert()
+         else:
+-            user = username_check
++            user = User(email=email, username=f"{username}{randomString(10)}", password=None)
++            user.insert()
++            info = "Yo your username was taken we simply changed it a bit no biggie fr"
+         existing_user = user
+     token = jwt.encode(
+         {"alg": "RS256"},
+         {"user": existing_user.username},
+         current_app.config["JWT_PRIVATE_KEY"],
+     )
+-    resp = make_response(redirect(url_for("server_api_blueprint.profile")))
++    resp = make_response(redirect(url_for("server_api_blueprint.profile, info=info")))
+     resp.set_cookie("access-token", token, samesite="Strict")
+     return resp
+ 
